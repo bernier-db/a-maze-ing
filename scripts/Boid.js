@@ -12,7 +12,7 @@ class Boid extends Drawable {
         this.target = new PVector(0, 0);
         this.maxForce = 0.03;
         this.maxSpeed = 2;
-        this.ray = 5;
+        this.ray = 3;
     }
 
     applyForce(force) {
@@ -39,14 +39,13 @@ class Boid extends Drawable {
 
         var iso = screenToIsometric(this.absLoc.x, this.absLoc.y);
 
-        this.loc.x = iso.x;
-        this.loc.y = iso.y;
-        var theta = this.vel.heading() + Math.PI/2
+//        this.loc.x = iso.x;
+//        this.loc.y = iso.y;
         
         CTX.fillStyle = "#000";
         CTX.strokeStyle = "#fff";
         CTX.save();
-        CTX.translate(CANVAS_W / 2, 0);
+        CTX.translate(CANVAS_W / 2 + DRAW_TILE_W/2, 0);
         CTX.ellipse(this.absLoc.x, this.absLoc.y, this.ray, this.ray, 0,0, TWO_PI);
         CTX.fill();
        

@@ -2,6 +2,7 @@ class ATile extends Drawable{
     constructor(walkable, texture, x, y, tileNum){
         var abs = isometricToScreen(x,y);
         super(texture, abs.x, abs.y);
+        
         this.abs_pos = abs;
         this.tileNum = tileNum;
         this.isWalkable = walkable;

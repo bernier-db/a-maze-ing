@@ -6,7 +6,7 @@ var TextureManager = (function() {
     function createInstance() {
 
         var tileset = new Image();
-        tileset.src = "../images/tiles.png";
+        tileset.src = "./images/tiles.png";
 
         instance = {
             tiles: tileset

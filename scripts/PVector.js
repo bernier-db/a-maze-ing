@@ -50,6 +50,14 @@ class PVector {
         return new PVector(v1.x - v2.x, v1.y - v2.y);
     }
 
+    round(){
+        this.x = this.x | 0;
+        this.y = this.y | 0;
+    }
+    floor(){
+        this.x = Math.floor(this.x);
+        this.y = Math.floor(this.y);
+    }
     heading() {
 
         var angle = Math.atan2(this.y, this.x);

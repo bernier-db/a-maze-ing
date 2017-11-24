@@ -67,12 +67,13 @@ class ConstructionState extends AState{
                             break;
                     }
                     moves.push(posY + posX * MAZE_W);
+                   // Board.drawMaze(posX, posY, this.maze);
                 } else {
                     var back = moves.pop();
                     posX = Math.floor(back / MAZE_W);
                     posY = back % MAZE_W;
                 }
-                Board.drawMaze(posX, posY, this.maze);
+                
             } else {
                 clearInterval(interval);
                 this.end();

@@ -11,9 +11,9 @@ class Boid extends Drawable {
 
         this.acc = new PVector(0, 0);
         this.vel = new PVector(0, 0);
-        this.target = new PVector(pos.x + 0.5, pos.y);
-        this.maxForce = 0.01;
-        this.maxSpeed = 0.05;
+        this.target = new PVector(pos.x + 1, pos.y);
+        this.maxForce = 0.05;
+        this.maxSpeed = 0.15;
         this.ray = 3;
         this.maze = maze;
 
@@ -34,6 +34,7 @@ class Boid extends Drawable {
         this.acc.mult(0);
 
         this.loc.add(this.vel);
+        this.target.add(this.vel);
     }
 
     steer() {
@@ -47,38 +48,65 @@ class Boid extends Drawable {
     }
 
     adaptTarget() {
-        var dir = PVector.sub(this.target, this.loc);
-        if (Math.abs(dir.mag()) < 0.5) {
-            this.target.add(dir);
-            this.target.floor();
+
+        //Est-ce que je peux y aller?
+        var tX = this.target.x | 0,
+            tY = this.target.y | 0;
+
+        if (!this.maze[tX] || !this.maze[tX][tY]) {
+            debugger;
+            return;
         }
-        
-        var x = Math.floor(this.loc.x);
-        var y = Math.floor(this.loc.y);
 
+        if (this.maze[tX] && this.maze[tX][tY] && this.maze[tX][tY] instanceof TileWall) {
 
-        //si on peut pas y aller, on regarde autour de sois
-        if (this.maze[this.target.x][this.target.y] instanceof TileWall) {
+            var cur = {
+                x: this.loc.x | 0,
+                y: this.loc.y | 0
+            };
+            var dest = {};
 
-            if (this.maze[x - 1][y] instanceof TileWalkable) {
-                this.target.x = this.loc.x - 0.5;
-                this.target.y = this.loc.y;
-            } else if (this.maze[x][y - 1] instanceof TileWalkable) {
-                this.target.x = x;
-                this.target.y = y - 0.5;
-            } else if (this.maze[x + 1][y] instanceof TileWalkable) {
-                this.target.x = x + 0.5;
-                this.target.y = y;
-            } else if (this.maze[x][y + 1] instanceof TileWalkable) {
-                this.target.x = x;
-                this.target.y = y + 0.5;
-            } else {
-                this.target.x = x;
-                this.target.y = y;
-            }
+            var ok = false;
+            do {
+                switch (Math.random() * 4 | 0) {
+                    case 0:
+                        if (this.maze[cur.x][cur.y - 1] instanceof TileWalkable) {
+                            dest.x = cur.x;
+                            dest.y = cur.y - 1;
+                        }
+                        ok = true;
+                        break;
+                    case 1:
+                        if (this.maze[cur.x + 1][cur.y] instanceof TileWalkable) {
+                            dest.x = cur.x + 1;
+                            dest.y = cur.y;
+                        }
+                        ok = true;
+                        break;
+                    case 2:
+                        if (this.maze[cur.x][cur.y + 1] instanceof TileWalkable) {
+                            dest.x = cur.x;
+                            dest.y = cur.y + 1;
+                        }
+                        ok = true;
+                        break;
+                    case 3:
+                        if (this.maze[cur.x - 1][cur.y] instanceof TileWalkable) {
+                            dest.x = cur.x - 1;
+                            dest.y = cur.y;
+                        }
+                        ok = true;
+                        break;
+                }
+            } while (!ok);
+            
+            
+            this.target.x = dest.x + 0.5;
+            this.target.y = dest.y + 0.5;
+
         }
-     
-       // this.target.add({x:0.5, y:0.5});
+
+
     }
 
 

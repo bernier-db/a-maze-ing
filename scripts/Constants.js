@@ -1,9 +1,14 @@
-const CTX = document.getElementById("canvas").getContext("2d");
-const MAZE_H = 25;
-const MAZE_W = 25;
+var canvas = document.getElementById("canvas");
+const CTX = canvas.getContext("2d");
+const MAZE_H = 40;
+const MAZE_W = 40;
 
-const CANVAS_W = 800;
-const CANVAS_H = 600;
+const CANVAS_W = document.body.clientWidth;
+const CANVAS_H = document.body.clientHeight*5;
+canvas.width = CANVAS_W;
+canvas.height = CANVAS_H;
+
+const nbBoids = 40;
 
 const TILESET_ROW = 10;
 const TILESET_COL = 12;

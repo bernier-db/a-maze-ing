@@ -21,10 +21,10 @@ class AnimationState extends AState {
     generateBoids() {
         this.boids = [];
         var x, y;
-        for (var i = 0; i < 20; i++) {
+        for (var i = 0; i < nbBoids; i++) {
             do {
-                x = Math.floor(Math.random() * MAZE_W);
-                y = Math.floor(Math.random() * MAZE_H);
+                x = Math.floor(Math.random() * (MAZE_W-3) +1);
+                y = Math.floor(Math.random() *( MAZE_H-3) +1 );
             } 
             while (this.main.Board.maze[x][y] instanceof TileWall);
 

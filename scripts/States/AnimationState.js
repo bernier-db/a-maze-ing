@@ -5,7 +5,7 @@ class AnimationState extends AState {
 
     start() {
         this.generateBoids();
-        console.log(this.boids);
+
         var interval = window.setInterval(function(){
             Board.drawMaze(0,0, this.main.Board.maze);
            this.boids.forEach(function(b){

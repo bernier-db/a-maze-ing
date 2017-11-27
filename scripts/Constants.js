@@ -27,7 +27,7 @@ const TWO_PI = Math.PI*2;
 function isometricToScreen(x, y){
     var _x = (x - y) * DRAW_TILE_W/2;
     var _y = (x + y) * DRAW_TILE_SURFACE_H/2;
-    return {x:_x, y:_y};
+    return {x:_x, y:_y + 20};
 }
 
 function screenToIsometric(x, y){

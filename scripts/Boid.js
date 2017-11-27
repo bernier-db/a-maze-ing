@@ -12,8 +12,8 @@ class Boid extends Drawable {
         this.acc = new PVector(0, 0);
         this.vel = new PVector(0, 0);
         this.target = new PVector(pos.x + 1, pos.y);
-        this.maxForce = 0.05;
-        this.maxSpeed = 0.15;
+        this.maxForce = 0.02;
+        this.maxSpeed = 0.1;
         this.ray = 3;
         this.maze = maze;
 
@@ -34,7 +34,9 @@ class Boid extends Drawable {
         this.acc.mult(0);
 
         this.loc.add(this.vel);
+
         this.target.add(this.vel);
+       
     }
 
     steer() {
@@ -49,60 +51,63 @@ class Boid extends Drawable {
 
     adaptTarget() {
 
-        //Est-ce que je peux y aller?
+        
         var tX = this.target.x | 0,
             tY = this.target.y | 0;
+        
+        //Si je peux tourner
+        
 
-        if (!this.maze[tX] || !this.maze[tX][tY]) {
-            debugger;
-            return;
-        }
 
+        //Si je ne peux pas y aller
         if (this.maze[tX] && this.maze[tX][tY] && this.maze[tX][tY] instanceof TileWall) {
 
             var cur = {
                 x: this.loc.x | 0,
                 y: this.loc.y | 0
             };
-            var dest = {};
+            var dest = {
+                x: 1,
+                y: 1
+            };
 
             var ok = false;
+            var dir;
             do {
-                switch (Math.random() * 4 | 0) {
+                dir = Math.random() * 4 | 0;
+                switch (dir) {
                     case 0:
-                        if (this.maze[cur.x][cur.y - 1] instanceof TileWalkable) {
+                        if (ok = this.maze[cur.x][cur.y - 1] instanceof TileWalkable) {
                             dest.x = cur.x;
                             dest.y = cur.y - 1;
                         }
-                        ok = true;
                         break;
                     case 1:
-                        if (this.maze[cur.x + 1][cur.y] instanceof TileWalkable) {
+                        if (ok = this.maze[cur.x + 1][cur.y] instanceof TileWalkable) {
                             dest.x = cur.x + 1;
                             dest.y = cur.y;
                         }
-                        ok = true;
                         break;
                     case 2:
-                        if (this.maze[cur.x][cur.y + 1] instanceof TileWalkable) {
+                        if (ok = this.maze[cur.x][cur.y + 1] instanceof TileWalkable) {
                             dest.x = cur.x;
                             dest.y = cur.y + 1;
                         }
-                        ok = true;
                         break;
                     case 3:
-                        if (this.maze[cur.x - 1][cur.y] instanceof TileWalkable) {
+                        if (ok = this.maze[cur.x - 1][cur.y] instanceof TileWalkable) {
                             dest.x = cur.x - 1;
                             dest.y = cur.y;
                         }
-                        ok = true;
+
                         break;
                 }
             } while (!ok);
-            
-            
-            this.target.x = dest.x + 0.5;
-            this.target.y = dest.y + 0.5;
+
+
+            this.target.x = (dest.x | 0) + 0.5;
+            this.target.y = (dest.y | 0) + 0.5;
+
 
         }
 
@@ -116,12 +121,19 @@ class Boid extends Drawable {
 
         CTX.fillStyle = "#000";
         CTX.strokeStyle = "#fff";
+
         CTX.save();
+
         CTX.translate(CANVAS_W / 2 + DRAW_TILE_W / 2, 0);
         CTX.beginPath();
         CTX.ellipse(this.absLoc.x, this.absLoc.y, this.ray, this.ray, 0, 0, TWO_PI);
         CTX.fill();
 
+        CTX.fillStyle = "#f00";
+        CTX.beginPath();
+        var absTar = isometricToScreen(this.target.x, this.target.y);
+        CTX.ellipse(absTar.x, absTar.y, this.ray, this.ray / 2, 0, 0, TWO_PI);
+        CTX.fill();
 
         CTX.restore();
     }

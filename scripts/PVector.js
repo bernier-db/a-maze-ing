@@ -51,12 +51,12 @@ class PVector {
     }
 
     round(){
-        this.x = this.x | 0;
-        this.y = this.y | 0;
+        this.x = Math.round(this.x);
+        this.y =  Math.round(this.y);
     }
     floor(){
-        this.x = Math.floor(this.x);
-        this.y = Math.floor(this.y);
+        this.x = this.x | 0;
+        this.y = this.y | 0;
     }
     heading() {
 

@@ -4,7 +4,10 @@ class PVector {
         this.y = y || 0;
     }
 
-
+    clone(){
+        return new PVector(this.x, this.y);
+    }
+    
     mag() {
         var mag = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
         return mag;
@@ -58,6 +61,11 @@ class PVector {
         this.x = this.x | 0;
         this.y = this.y | 0;
     }
+    
+    static floor(v){
+        return new PVector(v.x | 0, v.y | 0);
+    }
+    
     heading() {
 
         var angle = Math.atan2(this.y, this.x);

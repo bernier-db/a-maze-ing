@@ -12,11 +12,11 @@ class Boid extends Drawable {
         this.acc = new PVector(0, 0);
         this.vel = new PVector(0, 0);
         this.target = new PVector(pos.x + 1, pos.y);
-        this.maxForce = 0.02;
-        this.maxSpeed = 0.1;
+        this.maxForce = 0.015;
+        this.maxSpeed = Math.random() * 0.09 +0.01;
         this.ray = 3;
         this.maze = maze;
-
+        this.lastPos = new PVector(pos.x, pos.y);
         this.adaptTarget = this.adaptTarget.bind(this);
     }
 
@@ -33,10 +33,19 @@ class Boid extends Drawable {
         this.vel.limit(this.maxSpeed);
         this.acc.mult(0);
 
-        this.loc.add(this.vel);
-
-        this.target.add(this.vel);
+        
+        var temp = this.loc.clone();
        
+        this.loc.add(this.vel);
+        this.target.add(this.vel);
+
+        var dif = PVector.sub(PVector.floor(this.loc), PVector.floor(temp));
+        
+        if (dif.x !== 0 || dif.y !== 0) {
+            //debugger;
+            this.lastPos = temp.clone();
+            this.lastPos.floor();
+        }
     }
 
     steer() {
@@ -51,13 +60,9 @@ class Boid extends Drawable {
 
     adaptTarget() {
 
-        
+
         var tX = this.target.x | 0,
             tY = this.target.y | 0;
-        
-        //Si je peux tourner
-        
-
 
         //Si je ne peux pas y aller
         if (this.maze[tX] && this.maze[tX][tY] && this.maze[tX][tY] instanceof TileWall) {
@@ -66,13 +71,11 @@ class Boid extends Drawable {
                 x: this.loc.x | 0,
                 y: this.loc.y | 0
             };
-            var dest = {
-                x: 1,
-                y: 1
-            };
+            var dest = new PVector();
 
             var ok = false;
             var dir;
+            var counter = 0;
             do {
                 dir = Math.random() * 4 | 0;
                 switch (dir) {
@@ -102,38 +105,58 @@ class Boid extends Drawable {
 
                         break;
                 }
+                dest.floor();
+                var dif = PVector.sub(PVector.floor(dest), PVector.floor(this.lastPos));
+                
+                if ( counter < 25 && ok && dif.mag() == 0){
+                    ok = false;
+                }
+                counter++;
             } while (!ok);
+            
 
-
-            this.target.x = (dest.x | 0) + 0.5;
-            this.target.y = (dest.y | 0) + 0.5;
-
-
+            this.target = dest.clone();
+            this.target.add(new PVector(0.5, 0.5));
         }
-
-
     }
 
 
     display() {
 
         this.absLoc = isometricToScreen(this.loc.x, this.loc.y);
+        this.ray = DRAW_TILE_W/10;
 
         CTX.fillStyle = "#000";
         CTX.strokeStyle = "#fff";
 
         CTX.save();
-
+        //Dessin boid
         CTX.translate(CANVAS_W / 2 + DRAW_TILE_W / 2, 0);
         CTX.beginPath();
         CTX.ellipse(this.absLoc.x, this.absLoc.y, this.ray, this.ray, 0, 0, TWO_PI);
         CTX.fill();
 
-        CTX.fillStyle = "#f00";
-        CTX.beginPath();
-        var absTar = isometricToScreen(this.target.x, this.target.y);
-        CTX.ellipse(absTar.x, absTar.y, this.ray, this.ray / 2, 0, 0, TWO_PI);
-        CTX.fill();
+
+        //dessin target
+        if (DEBUG) {
+            CTX.fillStyle = "#f00";
+            CTX.beginPath();
+            var absTar = isometricToScreen(this.target.x, this.target.y);
+            CTX.ellipse(absTar.x, absTar.y, this.ray, this.ray / 2, 0, 0, TWO_PI);
+            CTX.fill();
+            CTX.beginPath();
+            CTX.moveTo(this.absLoc.x, this.absLoc.y);
+            CTX.strokeStyle = "#f00";
+            CTX.lineTo(absTar.x, absTar.y);
+            CTX.stroke();
+
+            //dessin lastpos
+            CTX.fillStyle = "#00f";
+            CTX.beginPath();
+            var abslast = isometricToScreen(this.lastPos.x + 0.5, this.lastPos.y + 0.5);
+            CTX.ellipse(abslast.x, abslast.y, this.ray, this.ray / 2, 0, 0, TWO_PI);
+            CTX.fill();
+        }
 
         CTX.restore();
     }

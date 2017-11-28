@@ -4,9 +4,12 @@ class AnimationState extends AState {
     }
 
     start() {
+        
+        window.addEventListener("keypress", this.input.bind(this));
         this.generateBoids();
-
-        var interval = window.setInterval(function(){
+        
+        //loop d'animation
+       this.interval = window.setInterval(function(){
             Board.drawMaze(0,0, this.main.Board.maze);
            this.boids.forEach(function(b){
                b.update();
@@ -15,7 +18,16 @@ class AnimationState extends AState {
         }.bind(this), 1000/30);
     }
 
-    end() {}
+    
+    
+    end() {
+        window.clearInterval(this.interval);
+    }
+    
+    input(e){
+        if(e.key == "d" || e.key == "D")
+            DEBUG = !DEBUG;
+    }
 
 
     generateBoids() {

@@ -1,4 +1,4 @@
-var TextureManager = (function() {
+var TextureManager = (function () {
     var instance;
 
 
@@ -7,9 +7,11 @@ var TextureManager = (function() {
 
         var tileset = new Image();
         tileset.src = "./images/tiles.png";
-
+        var title = new Image();
+        title.src = "./images/title.png";
         instance = {
-            tiles: tileset
+            tiles: tileset,
+            splash: title
         }
         return instance;
     }

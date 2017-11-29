@@ -1,7 +1,8 @@
 class Main {
     constructor(){
-        this.board = null;// = new Board(this.update.bind(this));
+        this.board = null;
         this.state = new SplashScreenState(this);
+        canvas.requestFullScreen();
     }
     
     set State(val){this.state = val;}

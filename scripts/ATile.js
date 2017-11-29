@@ -14,18 +14,19 @@ class ATile extends Drawable{
         var x, y;
         
         x = Math.floor((this.tileNum - 1)* TILE_W);
-        y = this.tileNum % TILESET_COL;
+        y = (((this.tileNum) / TILESET_COL) | 0) * TILE_H;
         
         return {x: x, y: y}
     }
     
     display(){
+        if(this instanceof TileWalkable){
         this.abs_pos = isometricToScreen(this.loc.x, this.loc.y);
         CTX.save();
         CTX.translate(CANVAS_W/2,0);
         
         CTX.drawImage(this.texture, this.txPos.x, this.txPos.y, TILE_W, TILE_H, this.abs_pos.x, this.abs_pos.y, DRAW_TILE_W, DRAW_TILE_H);
-        CTX.restore();
+        CTX.restore();}
     }
     
 }

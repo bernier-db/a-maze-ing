@@ -1,7 +1,7 @@
 class ConstructionState extends AState{
     constructor(main){
         super(main);
-        
+        this.start();
     }
     
     start(){
@@ -67,7 +67,9 @@ class ConstructionState extends AState{
                             break;
                     }
                     moves.push(posY + posX * MAZE_W);
-                    Board.drawMaze(posX, posY, this.maze);
+                   if(RELEASE)
+                        Board.drawMaze(posX, posY, this.maze);
+                    this.drawDesc();
                 } else {
                     var back = moves.pop();
                     posX = Math.floor(back / MAZE_W);
@@ -80,4 +82,6 @@ class ConstructionState extends AState{
             }
         }.bind(this));
     }
+    
+    
 }

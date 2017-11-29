@@ -6,13 +6,13 @@ canvas.height = CANVAS_H;
 const CTX = canvas.getContext("2d");
 
 var DEBUG = false;
-
+var RELEASE = true;
 const MAZE_H = 35;
 const MAZE_W = MAZE_H;
 
 
 
-const nbBoids = MAZE_H*1.5;
+const nbBoids = MAZE_H*3;
 
 const TILESET_ROW = 10;
 const TILESET_COL = 12;

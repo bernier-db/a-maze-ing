@@ -1,9 +1,13 @@
 import java.io.*;
 enum os {win, mac, linux, other}
 Process p;
-String filePath = "C:\\Users\\berni\\Dropbox\\automne\" \"2017\\dev\\a-maze-ing\\index.html";
+String filePath;
+
 
 void setup(){
+  filePath  = dataPath("index.html");
+  filePath = filePath.replaceAll(" ","\" \"");
+
 try {
     String command = "";
     switch(getOs()){
@@ -17,9 +21,10 @@ try {
       command = "xdg-open ";
       break;
       default:
+      javax.swing.JOptionPane.showMessageDialog(null, "Os non supporté");
       break;
     }
-    p = Runtime.getRuntime().exec(command + filePath);
+    p = Runtime.getRuntime().exec(command + filePath + " -fullscreen");
     p.waitFor();
    
 } catch (InterruptedException e) {

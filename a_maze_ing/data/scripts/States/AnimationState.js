@@ -4,6 +4,7 @@ class AnimationState extends AState {
         this.start();
         this.counter = 0;
 		adaptSize();
+        setTimeout(this.end.bind(this), 1.5*60*1000);//1 min30 pour reset
     }
 
     start() {
@@ -34,6 +35,10 @@ class AnimationState extends AState {
 
     end() {
         window.clearInterval(this.interval);
+        setTimeout(()=>{
+            window.close();
+        }, 1.5 *60 * 1000); // Fin du demo
+        this.main.State = new ConstructionState(this.main);
     }
 
     input(e) {

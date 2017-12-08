@@ -1,5 +1,5 @@
 var CANVAS_W = window.innerWidth;
-var CANVAS_H = window.innerHeight;
+var CANVAS_H = window.innerHeight - 20;
 var canvas = document.getElementById("canvas");
 canvas.width = CANVAS_W;
 canvas.height = CANVAS_H;
@@ -29,15 +29,17 @@ var WALL_POS = 1;
 
 const TWO_PI = Math.PI * 2;
 
-window.onresize = function () {
+window.onresize = adaptSize;
+
+	function adaptSize() {
     CANVAS_W = window.innerWidth;
-    CANVAS_H = window.innerHeight;
+    CANVAS_H = window.innerHeight-20;
     canvas.width = CANVAS_W;
     canvas.height = CANVAS_H;
     DRAW_TILE_W = (CANVAS_W / MAZE_W);
     DRAW_TILE_H = (DRAW_TILE_W * TILE_H / TILE_W);
     DRAW_TILE_SURFACE_H = (DRAW_TILE_W / 2);
-}
+};
 
 function isometricToScreen(x, y) {
     var _x = (x - y) * DRAW_TILE_W / 2;

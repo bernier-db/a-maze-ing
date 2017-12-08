@@ -3,6 +3,7 @@ class AnimationState extends AState {
         super(main);
         this.start();
         this.counter = 0;
+		adaptSize();
     }
 
     start() {
@@ -14,6 +15,9 @@ class AnimationState extends AState {
         this.interval = window.setInterval(function () {
             Board.drawMaze(0, 0, this.main.Board.maze);
             this.drawDesc();
+            if(DEBUG){
+                this.drawDebug();
+            }
             this.boids.forEach(function (b) {
                 b.update();
                 b.display();
@@ -43,20 +47,42 @@ class AnimationState extends AState {
         var x, y;
         for (var i = 0; i < nbBoids; i++) {
             do {
-                x = Math.floor(Math.random() * (MAZE_W - 3) + 1);
-                y = Math.floor(Math.random() * (MAZE_H - 3) + 1);
+                x = Math.floor(Math.random() * (MAZE_W - 3) + 1)+0.5;
+                y = Math.floor(Math.random() * (MAZE_H - 3) + 1)+0.5;
 
-                if (Math.random() * 10.0 > 1) {
-                    x = undefined;
-                    y = undefined;
-                }
             }
-            while (x && this.main.Board.maze[x][y] instanceof TileWall);
+            while (this.main.Board.maze[x-0.5][y-0.5] instanceof TileWall);
 
-            this.boids.push(new Boid(x ? {
-                x: x + 0.5,
-                y: y + 0.5
-            } : undefined, this.main.Board.maze));
+            //trouver les colorés
+			if (Math.random() * 5 < 4) {
+				x = undefined;
+				y = undefined;
+			}
+
+            var pos = {x:x,y:y};
+            this.boids.push(new Boid(pos, this.main.Board.maze));
         }
+    }
+
+
+	drawDebug(){
+        this.drawDebugDetail("#ff7b00", 20, CANVAS_H-35, "Target à atteindre -> Steering force toujours en direction de ce target.", true);
+        this.drawDebugDetail("red", 20, CANVAS_H-50, "Dernière position -> Pour éviter de reculer, sauf si aucun autre choix (après 5 essais random).", false);
+
+    }
+
+    drawDebugDetail(color, x, y, text, fill){
+		var ray = 8;
+
+		CTX.strokeStyle = color;
+		CTX.fillStyle = color;
+		CTX.beginPath();
+		CTX.ellipse(x, y, ray, ray / 2, 0, 0, TWO_PI);
+		CTX.stroke();
+		if(fill)
+			CTX.fill();
+
+		CTX.textBaseline = "middle";
+		CTX.fillText(text, x+ray+5,y);
     }
 }

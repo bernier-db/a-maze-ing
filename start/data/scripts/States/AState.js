@@ -10,15 +10,17 @@ class AState{
         CTX.textAlign = "left";
         var y = 20;
         
-        this.writeText("Génération de labyrinthe avec le recursive backtracker");
+        this.writeText("Génération aléatoire de labyrinthe avec le recursive backtracker");
         this.writeText("Système de tuile isométriques");
         this.writeText("Agents autonomes qui errent sans but");
+        this.writeText("Les couleurs sont simplement pour identifier l'endroit de départ");
         this.textY = 20;
         
     }
-    writeText(text, y){
-        CTX.fillText(text, 20, this.textY);
-        this.textY += 14;
+    writeText(text,x, y){
+        CTX.fillText(text, x || 20, y || this.textY);
+        if(!y)
+            this.textY += 15;
     }
     start(){};    
     end(){};

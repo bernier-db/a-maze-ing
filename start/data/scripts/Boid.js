@@ -4,7 +4,8 @@ class Boid extends Drawable {
     constructor(pos, maze) {
 
         var col = "white";
-        if (!pos) {
+        //Si pas de position, assigner coin et couleur random
+        if (pos.x === undefined) {
             var rand = Math.random() * 4;
             rand | 0;
             if (rand < 1) {
@@ -24,7 +25,7 @@ class Boid extends Drawable {
                     x: 1.5,
                     y: MAZE_H - 1.5
                 };
-                col = "gold"
+                col = "#f0f"
             } else {
                 pos = {
                     x: MAZE_W - 1.5,
@@ -109,7 +110,7 @@ class Boid extends Drawable {
         var dir;
         var counter = 0;
         do {
-            dir = Math.random() * 4 | 0;
+            dir = Math.random() * 5 | 0;
             switch (dir) {
                 case 0:
                     if (ok = this.maze[cur.x][cur.y - 1] instanceof TileWalkable) {
@@ -177,7 +178,7 @@ class Boid extends Drawable {
     
     
     display() {
-
+    	var targetCol = "#ff7b00"
         this.absLoc = isometricToScreen(this.loc.x, this.loc.y);
         this.ray = DRAW_TILE_W / 15;
 
@@ -185,23 +186,23 @@ class Boid extends Drawable {
         CTX.translate(CANVAS_W / 2 + DRAW_TILE_W / 2, 0);
         //dessin target
         if (DEBUG) {
-            CTX.fillStyle = "#f00";
+            CTX.fillStyle = targetCol;
             CTX.beginPath();
             var absTar = isometricToScreen(this.target.x, this.target.y);
             CTX.ellipse(absTar.x, absTar.y, this.ray, this.ray / 2, 0, 0, TWO_PI);
             CTX.fill();
             CTX.beginPath();
             CTX.moveTo(this.absLoc.x, this.absLoc.y);
-            CTX.strokeStyle = "#f00";
+            CTX.strokeStyle = targetCol;
             CTX.lineTo(absTar.x, absTar.y);
             CTX.stroke();
 
             //dessin lastpos
-            CTX.fillStyle = "#00f";
+            CTX.strokeStyle = "#f00";
             CTX.beginPath();
             var abslast = isometricToScreen(this.lastPos.x + 0.5, this.lastPos.y + 0.5);
             CTX.ellipse(abslast.x, abslast.y, this.ray, this.ray / 2, 0, 0, TWO_PI);
-            CTX.fill();
+            CTX.stroke();
         }
 
         //Dessin boid
